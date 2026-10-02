@@ -472,7 +472,7 @@ const PLACEHOLDER_GRADIENT = "linear-gradient(135deg, rgba(91,140,255,0.20), rgb
 
 function priceLine(game) {
   if (game.tag === "free") {
-    return game.price && game.price !== "0" ? `Ücretsiz <s>₺${game.price}</s>` : "Ücretsiz";
+    return game.price && game.price !== "0" ? `Pulsuz <s>₺${game.price}</s>` : "Pulsuz";
   }
   if (game.tag === "deal") {
     const sale = parseFloat(game.salePrice);
@@ -572,7 +572,7 @@ function formatDate(dateStr) {
   try {
     const d = new Date(dateStr);
     if (isNaN(d.getTime())) return "";
-    return d.toLocaleDateString("tr-TR", { day: "numeric", month: "short" });
+    return d.toLocaleDateString("az-AZ", { day: "numeric", month: "short" });
   } catch (e) { return ""; }
 }
 
@@ -632,12 +632,12 @@ async function openDetailSheet(game) {
     const detail = detailResult.value;
     const realStores = storesResult.status === "fulfilled" ? storesResult.value : [];
 
-    desc.textContent = bestDescription(detail, game) || "Bu oyun için bu dilde açıklama mevcut değil.";
+    desc.textContent = bestDescription(detail, game) || "Bu oyun haqqında bu dildə təsvir mövcud deyil.";
 
     let ratingsHTML = "";
     if (detail.metacritic) ratingsHTML += `<span class="rating-badge metacritic">Metacritic: ${detail.metacritic}</span>`;
     if (detail.rating) ratingsHTML += `<span class="rating-badge rawg">RAWG: ${detail.rating.toFixed(1)}</span>`;
-    if (detail.released) ratingsHTML += `<span class="rating-badge">Buraxılış: ${detail.released.slice(0, 4)}</span>`;
+    if (detail.released) ratingsHTML += `<span class="rating-badge">Buraxılış ili: ${detail.released.slice(0, 4)}</span>`;
     ratings.innerHTML = ratingsHTML;
 
     let storesHTML = "";
@@ -653,7 +653,7 @@ async function openDetailSheet(game) {
       }
     }
     if (!storesHTML) {
-      storesHTML = `<p class="sheet-meta">Bu oyun için mağaza bağlantısı bulunamadı.</p>`;
+      storesHTML = `<p class="sheet-meta">Bu oyun üçün mağaza keçidi tapılmadı.</p>`;
       if (game.url) storesHTML += `<button class="btn btn-outline store-btn" data-url="${game.url}">RAWG-da bax</button>`;
     }
     stores.innerHTML = storesHTML;
@@ -661,7 +661,7 @@ async function openDetailSheet(game) {
     desc.textContent = stripHTML(game.description) || "Təsvir mövcud deyil.";
     stores.innerHTML = game.url
       ? `<button class="btn btn-outline store-btn" data-url="${game.url}">RAWG-da bax</button>`
-      : `<p class="sheet-meta">Mağaza bilgisi yüklenemedi.</p>`;
+      : `<p class="sheet-meta">Mağaza məlumatını yükləmək mümkün olmadı.</p>`;
   }
 }
 
@@ -698,7 +698,7 @@ function bestDescription(detail, fallbackGame) {
 function escapeHTML(str) { return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
 function formatArticleHTML(text) {
   const paragraphs = (text || "").split(/\n{2,}/).map(p => p.trim()).filter(Boolean);
-  if (paragraphs.length === 0) return "<p>İçerik mevcut değil.</p>";
+  if (paragraphs.length === 0) return "<p>Məzmun mövcud deyil.</p>";
   return paragraphs.map(p => `<p>${escapeHTML(p)}</p>`).join("");
 }
 function readingTimeMinutes(text) {
@@ -849,7 +849,7 @@ async function loadGenreChips() {
   const chipsWrap = document.getElementById("genreChips");
   try {
     const genres = await API.genres();
-    const all = [{ slug: "all", name: "Tümü" }, ...genres];
+    const all = [{ slug: "all", name: "Hamısı" }, ...genres];
     chipsWrap.innerHTML = all.map((g, i) => `<button class="chip ${i === 0 ? "active" : ""}" data-genre="${g.slug}">${g.name}</button>`).join("");
   } catch (e) { chipsWrap.innerHTML = ""; }
 }
